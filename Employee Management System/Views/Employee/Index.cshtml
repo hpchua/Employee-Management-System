@@ -1,0 +1,242 @@
+﻿
+@{
+    ViewBag.Title = "Employee Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Employee List</h2>
+
+<br />
+
+<a class="btn btn-success btn-md" onclick="PopupCreateForm('@(Url.Action("Create", "Employee"))')"><i class='fa fa-plus'></i> Create</a>
+
+<br />
+<br />
+
+<table id="resultTable" class="table table-striped table-bordered" style="text-align:center">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Joined Date</th>
+            <th>Team</th>
+            <th>Position</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tfoot>
+        <tr>
+            <th>No.</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Joined Date</th>
+            <th>Team</th>
+            <th>Position</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </tfoot>
+</table>
+
+<!-- Modal Window CSS -->
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+
+<!-- Datatable CSS -->
+<link href="//cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <!-- Modal Window JavaScript -->
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+    <!-- Datatable JavaScript -->
+    <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap.min.js"></script>
+
+    <!-- Notify Alert Message -->
+    <script src="~/Scripts/notify.min.js"></script>
+
+    <script>
+        var Popup, dataTable;
+
+        // jQuery Datatable
+        $(document).ready(function () {
+            dataTable = $("#resultTable").DataTable({
+                "ajax": {
+                    "url": "/Employee/GetAll",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [
+                    {
+                        "data": "No",
+                        "searchable": false,
+                        "sortable": false,
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { "data": "Username", "name": "Username", "autoWidth": true },
+                    { "data": "FullName", "name": "FullName", "autoWidth": true },
+                    {
+                        "data": "JoinedDate",
+                        "name": "JoinedDate",
+                        "render": function (jsonDate)
+                        {
+                            var date = new Date(parseInt(jsonDate.substr(6)));
+                            var month = date.getMonth() + 1;
+                            return date.getDate() + "/" + month + "/" + date.getFullYear();
+                        }
+                    },
+                    { "data": "Team.TeamName", "name": "TeamName", "autoWidth": true },
+                    { "data": "Position.PositionName", "name": "PositionName", "autoWidth": true },
+                    { "data": "Status.StatusName", "name": "StatusName", "autoWidth": true },
+                    {
+                        "data": "Username",
+                        "searchable": false,
+                        "sortable": false,
+                        "render": function (data)
+                        {
+                            return "<a class='btn btn-warning' onclick=PopupEditForm('@Url.Action("Edit", "Employee")?username=" + data + "')><i class='fa fa-pencil'></i></a> <a class='btn btn-danger' onclick=PopupDeleteForm('@Url.Action("Delete", "Employee")?username=" + data + "') ><i class='fa fa-trash'></i></a>";
+                        }
+                    },
+                ],
+                "language": {
+                  "emptyTable" : "No data found, please click on <b>Create</b> Button"
+                },
+                "serverSide": true,     // for process server side
+                "order": [1, "asc"],    // sort username (column 2) in ascending order in default
+                "processing": true,     // for show progress bar
+            });
+        });
+
+        // Create
+        function PopupCreateForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url).done(function (response) {
+                formDiv.html(response);
+
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: 'Fill New Employee Details',
+                    height: 690,
+                    width: 500,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+        }
+
+        function SubmitCreateForm(form) {
+            $.validator.unobtrusive.parse(form);
+
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className : "success"
+                            })
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+        //Edit
+        function PopupEditForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url).done(function (response) {
+                formDiv.html(response);
+
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: 'Update Existing Employee Details',
+                    height: 720,
+                    width: 500,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+        }
+
+        function SubmitEditForm(form) {
+            $.validator.unobtrusive.parse(form);
+
+            if ($(form).valid()) {
+                $.ajax({
+                    type: "POST",
+                    url: form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.dialog('close');
+                            dataTable.ajax.reload();
+
+                            $.notify(data.message, {
+                                globalPosition: "top center",
+                                className: "success"
+                            })
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+        //Delete
+        function PopupDeleteForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url).done(function (response) {
+                formDiv.html(response);
+
+                Popup = formDiv.dialog({
+                    autoOpen: true,
+                    resizable: false,
+                    title: 'Delete Existing Employee Details',
+                    height: 500,
+                    width: 500,
+                    close: function () {
+                        Popup.dialog('destroy').remove();
+                    }
+                });
+            });
+        }
+
+        function SubmitDeleteForm(form) {
+            $.ajax({
+                type: "POST",
+                url: form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        Popup.dialog('close');
+                        dataTable.ajax.reload();
+
+                        $.notify(data.message, {
+                            globalPosition: "top center",
+                            className: "success"
+                        })
+                    }
+                }
+            });
+        }
+    </script>
+}
