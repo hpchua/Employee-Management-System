@@ -20,9 +20,11 @@
 
 2. Modal Window
 > ```<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />```
+
 > ```<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>```
 
 3. Validator JS For ModelState Error
 > ```<script src="~/Scripts/jquery.validate.min.js"></script>```
+
 > ```<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>```
 
