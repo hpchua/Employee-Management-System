@@ -8,7 +8,7 @@
 * display error message
 
 ### Employee
-(Popup Modal Window)  
+(jQuery DataTable and Popup Modal Window)  
 * Perform **Add, List, Edit and Delete** employee operation
 * Display error message if found any employee duplicate existing information
 * Display successful message using **Notify.js**
