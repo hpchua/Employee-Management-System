@@ -1,5 +1,18 @@
 # Employee Management System
 
+## Features
+### Login
+* Restrict the user login failure attempts (10 times)
+* user is not allowed to login simultaneously, system will detect and redirect the current user to logout
+* loading screen
+* display error message
+
+### Employee
+(Popup Modal Window)  
+* Perform **Add, List, Edit and Delete** employee operation
+* Display error message if found any employee duplicate existing information
+* Display successful message using **Notify.js**
+
 ## ERD
 
 ![ERD](https://user-images.githubusercontent.com/52247950/113497458-fcface80-9536-11eb-9c20-a1857c401c59.png)
