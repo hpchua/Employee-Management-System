@@ -61,7 +61,7 @@ namespace Employee_Management_System.Controllers
             return Json(new { success = true, message = "Created Successfully!" }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
+        [HttpGet]
         public JsonResult IsUsernameUnique(string username)
         {
             bool isUnique;
@@ -80,10 +80,10 @@ namespace Employee_Management_System.Controllers
             return Json(isUnique, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public JsonResult IsEmployeeIDUnique(long employeeID)
+        [HttpGet]
+        public JsonResult IsEmployeeIDUnique(string employeeID)
         {
-            return Json(EmployeeDA.IsEmployeeIDExists(employeeID), JsonRequestBehavior.AllowGet);
+            return Json(EmployeeDA.IsEmployeeIDExists(long.Parse(employeeID)), JsonRequestBehavior.AllowGet);
 
             /*
             var idExists = EmployeeDA.IsEmployeeIDExists(employeeID);

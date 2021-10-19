@@ -232,15 +232,17 @@ namespace Employee_Management_System.DA
             }
         }
 
-        public static void DeleteEmployee(long? employeeID)
+        public static void DeleteEmployee(long employeeID)
         {
             try
             {
                 Employee employeeToDelete = db.Employees.Find(employeeID);
 
-                db.Employees.Remove(employeeToDelete);
-
-                db.SaveChanges();
+                if (employeeToDelete != null)
+                {
+                    db.Employees.Remove(employeeToDelete);
+                    db.SaveChanges();
+                }
             }
             catch (SqlException ex)
             {

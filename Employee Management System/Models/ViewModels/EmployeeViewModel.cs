@@ -157,7 +157,7 @@ namespace Employee_Management_System.Models.ViewModels
         [DisplayName("Confirm Password")]
         [DataType(DataType.Password)]
         [Required(ErrorMessage = "Please fill in confirm password.")]
-        [System.ComponentModel.DataAnnotations.Compare("password", ErrorMessage = "The password fields did not match.")]
+        [System.ComponentModel.DataAnnotations.Compare("Password", ErrorMessage = "The password fields did not match.")]
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Please fill in email address.")]

@@ -21,19 +21,19 @@
                 </button>
                 @if (Session["EmployeeID"] == null)
                 {
-                    @Html.ActionLink("Employee Management", "", "", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Employee Management", "", "", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 else
                 {
-                    @Html.ActionLink("Employee Management", "Index", "Employee", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Employee Management", "Index", "Employee", new { area = "" }, new { @class = "navbar-brand" })
                 }
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     @if (Session["EmployeeID"] != null)
                     {
-                        <li><a href="#">Hi, @Session["Username"].ToString()!</a></li>
-                        <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
+                    <li><a href="#">Hi, @Session["Username"].ToString()!</a></li>
+                    <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                     }
                 </ul>
             </div>
@@ -48,7 +48,9 @@
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
